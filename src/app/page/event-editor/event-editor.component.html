@@ -1,29 +1,75 @@
 <div class="row">
-  <div *ngIf="(event$ | async) as event" class="col-6 offset-3">
+  <div *ngIf="event$ | async as event" class="col-6 offset-3">
+    {{event}}
     <form #eventForm="ngForm" (ngSubmit)="onUpdate(eventForm, event)">
       <div class="form-group">
         <label for="">Name</label>
-        <input name="name" [(ngModel)]="event.name" type="text"
-          class="form-control" pattern=".{8,}" required>
-        <div [hidden]="eventForm.controls.name?.valid" class="error-message">
-          The name of the event must be...
+        <input
+          name="name"
+          [(ngModel)]="event.name"
+          type="text"
+          class="form-control"
+          pattern=".{8,28}"
+          required
+        />
+        <div [hidden]="eventForm.controls.name.valid" class="error-message">
+          The name of the event must have minimum 8, maximum 25 characters.
         </div>
       </div>
       <div class="form-group">
         <label for="">Date</label>
-        <input name="date" [(ngModel)]="event.date" type="text"
-          class="form-control">
+        <input
+          name="date"
+          [(ngModel)]="event.date"
+          type="text"
+          class="form-control"
+          pattern="^\d{1,2}\/\d{1,2}\/\d{4}$"
+
+          required
+        />
+        <div [hidden]="eventForm.controls.date.valid" class="error-message">
+          Date have to follow the english format: 'dd/mm/yyyy' - day/month/year
+          - 1 or 2/2/4 characters.
+        </div>
       </div>
       <div class="form-group">
         <label for="">Time</label>
-        <input name="time" [(ngModel)]="event.time" type="text" class="form-control">
+        <input
+          name="time"
+          [(ngModel)]="event.time"
+          type="text"
+          class="form-control"
+          pattern="^([1-9]|0[1-9]|1[0-2]):[0-5][0-9] ([AaPp][Mm])$"
+          required
+        />
+        <div [hidden]="eventForm.controls.time.valid" class="error-message">
+          Time have to follow the english format: 'hh:ss/am' or 'hh::ss/pm' - hour:second/am
+          or pm.
+        </div>
       </div>
       <div class="form-group">
         <label for="">Location</label>
-        <input name="location" [(ngModel)]="event.location" type="text" class="form-control">
+        <input
+          name="location"
+          [(ngModel)]="event.location"
+          type="text"
+          class="form-control"
+          required
+          pattern="^.{5,25}$"
+        />
+        <div
+          [hidden]="eventForm.controls.location.valid"
+          class="error-message"
+        >
+          The location of the event must have minimum 5, maximum 25 characters.
+        </div>
       </div>
 
-      <button type="submit" class="btn btn-primary btn-block btn-lg">
+      <button
+        [disabled]="eventForm.invalid"
+        type="submit"
+        class="btn btn-primary btn-block btn-lg"
+      >
         <i class="fa fa-save"></i>
       </button>
     </form>
